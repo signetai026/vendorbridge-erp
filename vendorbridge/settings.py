@@ -120,3 +120,34 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    'crispy_forms',
+    'crispy_bootstrap5',
+
+    'apps.accounts',
+    'apps.dashboard',
+    'apps.vendors',
+    'apps.rfqs',
+    'apps.quotations',
+    'apps.approvals',
+    'apps.purchase_orders',
+    'apps.invoices',
+    'apps.reports',
+    'apps.activity_logs',
+]
+TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']
+STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
