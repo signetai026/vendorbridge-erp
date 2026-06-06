@@ -1,0 +1,191 @@
+{% extends 'base/base.html' %}
+{% block title %}Dashboard — VendorBridge ERP{% endblock %}
+{% block breadcrumb %}<span class="vb-bc-item"><i class="bi bi-grid-1x2-fill me-1"></i>Dashboard</span>{% endblock %}
+
+{% block content %}
+<div class="vb-page-header">
+  <div>
+    <h1 class="vb-page-title">Procurement Dashboard</h1>
+    <p class="vb-page-sub">Overview of your procurement operations</p>
+  </div>
+  <div class="vb-page-actions">
+    <a href="{% url 'rfq_create' %}" class="btn vb-btn-primary"><i class="bi bi-plus-lg me-2"></i>New RFQ</a>
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="row g-4 mb-4">
+  <div class="col-xl-3 col-md-6">
+    <div class="vb-kpi-card vb-kpi-blue">
+      <div class="vb-kpi-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
+      <div class="vb-kpi-body">
+        <div class="vb-kpi-value">{{ total_rfqs }}</div>
+        <div class="vb-kpi-label">Total RFQs</div>
+        <div class="vb-kpi-meta"><span class="text-success">{{ published_rfqs }}</span> Published · <span class="text-warning">{{ draft_rfqs }}</span> Draft</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="vb-kpi-card vb-kpi-green">
+      <div class="vb-kpi-icon"><i class="bi bi-receipt-cutoff"></i></div>
+      <div class="vb-kpi-body">
+        <div class="vb-kpi-value">{{ total_quotations }}</div>
+        <div class="vb-kpi-label">Total Quotations</div>
+        <div class="vb-kpi-meta"><span class="text-warning">{{ pending_quotations }}</span> Pending · <span class="text-success">{{ approved_quotations }}</span> Approved</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="vb-kpi-card vb-kpi-purple">
+      <div class="vb-kpi-icon"><i class="bi bi-building-fill"></i></div>
+      <div class="vb-kpi-body">
+        <div class="vb-kpi-value">{{ total_vendors }}</div>
+        <div class="vb-kpi-label">Registered Vendors</div>
+        <div class="vb-kpi-meta"><span class="text-success">{{ active_vendors }}</span> Active</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="vb-kpi-card vb-kpi-orange">
+      <div class="vb-kpi-icon"><i class="bi bi-trophy-fill"></i></div>
+      <div class="vb-kpi-body">
+        <div class="vb-kpi-value">{{ awarded_rfqs }}</div>
+        <div class="vb-kpi-label">Awarded RFQs</div>
+        <div class="vb-kpi-meta"><span class="text-info">{{ closed_rfqs }}</span> Closed</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-4 mb-4">
+  <div class="col-lg-5">
+    <div class="vb-card">
+      <div class="vb-card-header">
+        <h5 class="vb-card-title"><i class="bi bi-pie-chart-fill me-2"></i>RFQ by Status</h5>
+      </div>
+      <div class="vb-card-body">
+        <div style="position:relative; height:240px;">
+          <canvas id="rfqStatusChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-7">
+    <div class="vb-card">
+      <div class="vb-card-header">
+        <h5 class="vb-card-title"><i class="bi bi-bar-chart-fill me-2"></i>Quotation Status Overview</h5>
+      </div>
+      <div class="vb-card-body">
+        <div style="position:relative; height:240px;">
+          <canvas id="quotationStatusChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="vb-card">
+      <div class="vb-card-header">
+        <h5 class="vb-card-title"><i class="bi bi-clock-history me-2"></i>Recent RFQs</h5>
+        <a href="{% url 'rfq_list' %}" class="btn btn-sm vb-btn-outline-primary">View All</a>
+      </div>
+      <div class="vb-card-body p-0">
+        <div class="table-responsive">
+          <table class="table vb-table mb-0">
+            <thead><tr><th>RFQ#</th><th>Title</th><th>Status</th><th>Deadline</th></tr></thead>
+            <tbody>
+              {% for rfq in recent_rfqs %}
+              <tr>
+                <td><a href="{% url 'rfq_detail' rfq.pk %}" class="vb-link">{{ rfq.rfq_number }}</a></td>
+                <td class="text-truncate" style="max-width:180px;">{{ rfq.title }}</td>
+                <td><span class="vb-badge-status vb-status-{{ rfq.status }}">{{ rfq.get_status_display }}</span></td>
+                <td class="vb-mono">{{ rfq.deadline|date:"d M Y" }}</td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="4" class="text-center text-muted py-3">No RFQs yet</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="vb-card">
+      <div class="vb-card-header">
+        <h5 class="vb-card-title"><i class="bi bi-receipt me-2"></i>Recent Quotations</h5>
+        <a href="{% url 'quotation_list' %}" class="btn btn-sm vb-btn-outline-primary">View All</a>
+      </div>
+      <div class="vb-card-body p-0">
+        <div class="table-responsive">
+          <table class="table vb-table mb-0">
+            <thead><tr><th>Quote#</th><th>Vendor</th><th>RFQ</th><th>Status</th></tr></thead>
+            <tbody>
+              {% for q in recent_quotations %}
+              <tr>
+                <td><a href="{% url 'quotation_detail' q.pk %}" class="vb-link">{{ q.quotation_number }}</a></td>
+                <td class="text-truncate" style="max-width:120px;">{{ q.vendor.company_name }}</td>
+                <td><a href="{% url 'rfq_detail' q.rfq.pk %}" class="vb-link-muted">{{ q.rfq.rfq_number }}</a></td>
+                <td><span class="vb-badge-status vb-status-{{ q.status }}">{{ q.get_status_display }}</span></td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="4" class="text-center text-muted py-3">No quotations yet</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const rfqData = {{ rfq_status_data|safe }};
+const qtData = {{ quotation_status_data|safe }};
+
+new Chart(document.getElementById('rfqStatusChart'), {
+  type: 'doughnut',
+  data: {
+    labels: rfqData.labels,
+    datasets: [{
+      data: rfqData.data,
+      backgroundColor: ['#6b7280','#3b82f6','#ef4444','#10b981'],
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'right', labels: { font: { family: 'Plus Jakarta Sans', size: 12 }, color: '#64748b' } } }
+  }
+});
+
+new Chart(document.getElementById('quotationStatusChart'), {
+  type: 'bar',
+  data: {
+    labels: qtData.labels,
+    datasets: [{
+      label: 'Quotations',
+      data: qtData.data,
+      backgroundColor: ['#94a3b8','#3b82f6','#10b981','#ef4444'],
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#64748b' } },
+      x: { grid: { display: false }, ticks: { color: '#64748b' } }
+    }
+  }
+});
+</script>
+{% endblock %}
+DASH_EOF

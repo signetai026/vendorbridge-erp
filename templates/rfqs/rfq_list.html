@@ -1,0 +1,125 @@
+{% extends 'base/base.html' %}
+{% block title %}RFQ Management — VendorBridge{% endblock %}
+{% block breadcrumb %}
+<span class="vb-bc-item"><a href="{% url 'dashboard' %}">Home</a></span>
+<span class="vb-bc-sep"><i class="bi bi-chevron-right"></i></span>
+<span class="vb-bc-item active">RFQ Management</span>
+{% endblock %}
+
+{% block content %}
+<div class="vb-page-header">
+  <div>
+    <h1 class="vb-page-title">RFQ Management</h1>
+    <p class="vb-page-sub">Manage all Request for Quotation documents</p>
+  </div>
+  <div class="vb-page-actions">
+    <a href="{% url 'rfq_create' %}" class="btn vb-btn-primary"><i class="bi bi-plus-lg me-2"></i>Create RFQ</a>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="vb-filter-bar">
+  <form method="get" class="d-flex gap-3 flex-wrap align-items-center">
+    <div class="vb-search-wrap">
+      <i class="bi bi-search vb-search-icon"></i>
+      <input type="text" name="search" value="{{ search }}" class="form-control vb-search-input" placeholder="Search RFQs...">
+    </div>
+    <select name="status" class="form-select vb-filter-select">
+      <option value="">All Statuses</option>
+      {% for val, label in status_choices %}
+      <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <select name="category" class="form-select vb-filter-select">
+      <option value="">All Categories</option>
+      {% for val, label in category_choices %}
+      <option value="{{ val }}" {% if category_filter == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn vb-btn-outline-primary"><i class="bi bi-funnel me-1"></i>Filter</button>
+    <a href="{% url 'rfq_list' %}" class="btn vb-btn-ghost"><i class="bi bi-x me-1"></i>Clear</a>
+  </form>
+</div>
+
+<!-- RFQ Table -->
+<div class="vb-card">
+  <div class="vb-card-body p-0">
+    <div class="table-responsive">
+      <table class="table vb-table vb-datatable" id="rfqTable">
+        <thead>
+          <tr>
+            <th>RFQ Number</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Deadline</th>
+            <th>Vendors</th>
+            <th>Quotes</th>
+            <th>Created By</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rfq in rfqs %}
+          <tr>
+            <td><a href="{% url 'rfq_detail' rfq.pk %}" class="vb-link vb-mono">{{ rfq.rfq_number }}</a></td>
+            <td>
+              <div class="vb-cell-title">{{ rfq.title|truncatechars:50 }}</div>
+              <div class="vb-cell-sub">{{ rfq.description|truncatechars:60 }}</div>
+            </td>
+            <td><span class="vb-badge-cat">{{ rfq.get_category_display }}</span></td>
+            <td><span class="vb-badge-status vb-status-{{ rfq.status }}">{{ rfq.get_status_display }}</span></td>
+            <td>
+              <span class="vb-mono {% if rfq.deadline < now %}text-danger{% endif %}">{{ rfq.deadline|date:"d M Y" }}</span>
+              <div class="vb-cell-sub">{{ rfq.deadline|date:"H:i" }}</div>
+            </td>
+            <td><span class="vb-count-badge">{{ rfq.vendor_count }}</span></td>
+            <td><span class="vb-count-badge vb-count-green">{{ rfq.quotation_count }}</span></td>
+            <td>{{ rfq.created_by.get_full_name|default:rfq.created_by.username }}</td>
+            <td>
+              <div class="vb-action-btns">
+                <a href="{% url 'rfq_detail' rfq.pk %}" class="vb-action-btn" title="View"><i class="bi bi-eye-fill"></i></a>
+                {% if rfq.status == 'draft' %}
+                <a href="{% url 'rfq_edit' rfq.pk %}" class="vb-action-btn" title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                <form method="post" action="{% url 'rfq_publish' rfq.pk %}" class="d-inline">
+                  {% csrf_token %}
+                  <button type="submit" class="vb-action-btn vb-action-green" title="Publish"><i class="bi bi-send-fill"></i></button>
+                </form>
+                {% endif %}
+                <a href="{% url 'rfq_clone' rfq.pk %}" class="vb-action-btn vb-action-blue" title="Clone"><i class="bi bi-copy"></i></a>
+                {% if rfq.status == 'draft' %}
+                <a href="{% url 'rfq_delete' rfq.pk %}" class="vb-action-btn vb-action-red" title="Delete"><i class="bi bi-trash-fill"></i></a>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="9" class="text-center py-5">
+            <div class="vb-empty-state">
+              <i class="bi bi-file-earmark-text"></i>
+              <p>No RFQs found. <a href="{% url 'rfq_create' %}">Create your first RFQ</a></p>
+            </div>
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+{% now "U" as now_ts %}
+$(document).ready(function() {
+  if ($('#rfqTable tbody tr').length > 1) {
+    $('#rfqTable').DataTable({
+      pageLength: 15, ordering: true, searching: false,
+      columnDefs: [{ orderable: false, targets: -1 }],
+      language: { emptyTable: "No RFQs found" },
+    });
+  }
+});
+</script>
+{% endblock %}
+TMPL_EOF

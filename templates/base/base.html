@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}VendorBridge ERP{% endblock %}</title>
+{% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="{% static 'css/vendorbridge.css' %}" rel="stylesheet">
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="vb-sidebar" id="sidebar">
+  <div class="vb-brand">
+    <div class="vb-brand-icon"><i class="bi bi-box-seam-fill"></i></div>
+    <div class="vb-brand-text">
+      <span class="vb-brand-name">VendorBridge</span>
+      <span class="vb-brand-sub">ERP Platform</span>
+    </div>
+  </div>
+
+  <nav class="vb-nav">
+    <div class="vb-nav-section">MAIN</div>
+    <a href="{% url 'dashboard' %}" class="vb-nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+      <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+    </a>
+
+    <div class="vb-nav-section">PROCUREMENT</div>
+    <a href="{% url 'rfq_list' %}" class="vb-nav-link {% if 'rfq' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-file-earmark-text-fill"></i><span>RFQ Management</span>
+      <span class="vb-badge" id="rfq-badge"></span>
+    </a>
+    <a href="{% url 'quotation_list' %}" class="vb-nav-link {% if 'quotation' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-receipt-cutoff"></i><span>Quotations</span>
+    </a>
+
+    <div class="vb-nav-section">VENDORS</div>
+    <a href="{% url 'vendor_list' %}" class="vb-nav-link {% if 'vendor' in request.resolver_match.url_name and 'portal' not in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-building-fill"></i><span>Vendor Directory</span>
+    </a>
+    <a href="{% url 'vendor_portal' %}" class="vb-nav-link {% if 'portal' in request.resolver_match.url_name %}active{% endif %}">
+      <i class="bi bi-person-badge-fill"></i><span>Vendor Portal</span>
+    </a>
+
+    <div class="vb-nav-section">SYSTEM</div>
+    <a href="/admin/" class="vb-nav-link" target="_blank">
+      <i class="bi bi-gear-fill"></i><span>Admin Panel</span>
+    </a>
+  </nav>
+
+  <div class="vb-sidebar-footer">
+    <div class="vb-user">
+      <div class="vb-user-avatar">{{ request.user.username|first|upper }}</div>
+      <div class="vb-user-info">
+        <span class="vb-user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+        <span class="vb-user-role">{% if request.user.is_superuser %}Administrator{% else %}User{% endif %}</span>
+      </div>
+    </div>
+    <a href="{% url 'logout' %}" class="vb-logout-btn"><i class="bi bi-box-arrow-right"></i></a>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="vb-main" id="main-content">
+  <!-- Topbar -->
+  <div class="vb-topbar">
+    <button class="vb-menu-toggle" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
+    <div class="vb-breadcrumb">
+      {% block breadcrumb %}
+      <span class="vb-bc-item"><i class="bi bi-house-fill"></i></span>
+      {% endblock %}
+    </div>
+    <div class="vb-topbar-right">
+      <button class="vb-icon-btn" title="Notifications"><i class="bi bi-bell-fill"></i><span class="vb-notif-dot"></span></button>
+      <div class="vb-topbar-user">{{ request.user.username }}</div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="vb-content">
+    {% if messages %}
+    <div class="vb-alerts">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show vb-alert" role="alert">
+        <i class="bi {% if message.tags == 'success' %}bi-check-circle-fill{% elif message.tags == 'error' or message.tags == 'danger' %}bi-exclamation-triangle-fill{% else %}bi-info-circle-fill{% endif %}"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{% static 'js/vendorbridge.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>
+TMPL_EOF
