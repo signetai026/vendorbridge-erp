@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Vendor Management</h1>
+
+<a href="/vendors/create/">Add Vendor</a>
+
+<table>
+
+<tr>
+<th>Company</th>
+<th>Category</th>
+<th>Status</th>
+</tr>
+
+{% for vendor in vendors %}
+
+<tr>
+<td>{{ vendor.company_name }}</td>
+<td>{{ vendor.category }}</td>
+<td>{{ vendor.status }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

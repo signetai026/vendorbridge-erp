@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def purchase_order_list(request):
+    return render(request, 'purchase_orders/po_list.html')

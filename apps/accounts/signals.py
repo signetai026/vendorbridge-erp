@@ -6,4 +6,4 @@ from .models import User
 @receiver(post_save, sender=User)
 def user_post_save(sender, instance, created, **kwargs):
     if created:
-        print(f"[SIGNAL] New user created: {instance.email} with role: {instance.role}")
+     print(f"[SIGNAL] New user created: {instance.email} with role: {instance.role}")

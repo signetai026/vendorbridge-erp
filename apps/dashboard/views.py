@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from datetime import timedelta, date
 import json
  
-from vendors.models import Vendor
+from apps.vendors.models import Vendor
 from .models import RFQ, PurchaseOrder, Invoice, Approval
  
  
@@ -207,7 +207,7 @@ def reports_view(request):
  
 @login_required
 def activity_view(request):
-    from vendors.models import VendorActivity
+    from apps.vendors.models import VendorActivity
     activities = VendorActivity.objects.select_related('vendor', 'performed_by').order_by('-created_at')
  
     from django.core.paginator import Paginator

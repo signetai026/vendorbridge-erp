@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Approval Management</h1>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="10">
+    <tr>
+        <th>RFQ</th>
+        <th>Requested By</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    <tr>
+        <td>RFQ001 - Laptop Procurement</td>
+        <td>Admin</td>
+        <td>Pending</td>
+        <td>
+            <button>Approve</button>
+            <button>Reject</button>
+        </td>
+    </tr>
+</table>
+
+{% endblock %}

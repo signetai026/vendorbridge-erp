@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Create Quotation</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    <p>
+        <label>Vendor Name</label><br>
+        <input type="text" name="vendor">
+    </p>
+
+    <p>
+        <label>Amount</label><br>
+        <input type="number" name="amount">
+    </p>
+
+    <p>
+        <label>Remarks</label><br>
+        <textarea name="remarks"></textarea>
+    </p>
+
+    <button type="submit">Save Quotation</button>
+</form>
+
+{% endblock %}

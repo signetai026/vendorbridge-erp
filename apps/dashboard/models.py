@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from accounts.models import User
+from apps.accounts.models import User
  
  
 class RFQ(models.Model):

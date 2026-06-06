@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Quotation Management</h1>
+
+<a href="/quotations/create/">+ Create Quotation</a>
+
+<table border="1" width="100%">
+    <tr>
+        <th>ID</th>
+        <th>Vendor</th>
+        <th>Amount</th>
+        <th>Status</th>
+    </tr>
+
+    <tr>
+        <td>Q001</td>
+        <td>ABC Suppliers</td>
+        <td>50000</td>
+        <td>Submitted</td>
+    </tr>
+</table>
+
+{% endblock %}

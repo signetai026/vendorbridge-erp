@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Vendor Management</h1>
+
+<div style="margin-bottom:20px;">
+    <a href="/vendors/create/" class="btn">+ Add Vendor</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Vendor Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>GST</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for vendor in page_obj %}
+    <tr>
+        <td>{{ vendor.vendor_name }}</td>
+        <td>{{ vendor.email }}</td>
+        <td>{{ vendor.phone }}</td>
+        <td>{{ vendor.gst_number }}</td>
+        <td>{{ vendor.status }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">No Vendors Found</td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

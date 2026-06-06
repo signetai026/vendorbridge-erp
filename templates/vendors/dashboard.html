@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Vendor Management</h1>
+
+<div class="cards">
+    <div class="card">
+        <h3>Total Vendors</h3>
+        <h2>{{ total_vendors }}</h2>
+    </div>
+
+    <div class="card">
+        <h3>Active Vendors</h3>
+        <h2>{{ active_vendors }}</h2>
+    </div>
+
+    <div class="card">
+        <h3>Pending Vendors</h3>
+        <h2>{{ pending_vendors }}</h2>
+    </div>
+</div>
+
+<div style="margin-bottom:20px;">
+    <input type="text" placeholder="Search Vendor..."
+           style="padding:10px;width:250px;">
+
+    <select style="padding:10px;">
+        <option>All Status</option>
+        <option>Active</option>
+        <option>Pending</option>
+        <option>Blocked</option>
+    </select>
+
+    <button style="
+        padding:10px 15px;
+        background:#2563eb;
+        color:white;
+        border:none;
+        border-radius:5px;">
+        <a href="/vendors/create/" class="btn-add">
+    + Add Vendor
+</a>
+    </button>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Vendor Name</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for vendor in recent_vendors %}
+        <tr>
+            <td>{{ vendor.vendor_name }}</td>
+            <td>{{ vendor.status }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">No Vendors Found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

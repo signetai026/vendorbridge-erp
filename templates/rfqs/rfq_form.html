@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Create RFQ</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">Save RFQ</button>
+</form>
+
+<a href="/rfqs/">Back to List</a>
+
+{% endblock %}

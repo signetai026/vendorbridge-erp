@@ -1,8 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.utils import timezone
-from approvals.models import Vendor, RFQ, Quotation
 
+from django.utils import timezone
+from apps.approvals.models import Vendor, RFQ, Quotation
+from django.db import models
+from django.conf import settings
+from django.utils import timezone
+from apps.approvals.models import Vendor, RFQ, Quotation
 
 class PurchaseOrder(models.Model):
     STATUS_CHOICES = [
@@ -28,8 +31,19 @@ class PurchaseOrder(models.Model):
     total_amount = models.DecimalField(max_digits=14, decimal_places=2, default=0)
     notes = models.TextField(blank=True)
     terms_conditions = models.TextField(blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_pos')
-    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='approved_pos')
+    created_by = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True,
+    related_name='created_pos'
+)
+    approved_by = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name='approved_pos'
+)
     approved_at = models.DateTimeField(null=True, blank=True)
     issued_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

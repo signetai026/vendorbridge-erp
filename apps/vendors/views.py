@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
  
 from .models import Vendor, VendorCategory, VendorActivity, VendorDocument
 from .forms import VendorForm, VendorCategoryForm, VendorFilterForm, VendorDocumentForm
-from accounts.decorators import procurement_access_required
+from apps.accounts.decorators import procurement_access_required
  
  
 def log_activity(vendor, action, user, details=''):

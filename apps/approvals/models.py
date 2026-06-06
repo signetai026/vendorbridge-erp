@@ -1,8 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+
 from django.utils import timezone
 from decimal import Decimal
-
+from django.db import models
+from django.conf import settings
+from django.utils import timezone
+from decimal import Decimal
 
 class Vendor(models.Model):
     CATEGORY_CHOICES = [
@@ -39,7 +42,12 @@ class Vendor(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     is_active = models.BooleanField(default=True)
     notes = models.TextField(blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_vendors')
+    created_by = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True,
+    related_name='created_vendors'
+)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -51,14 +59,14 @@ class Vendor(models.Model):
 
     @property
     def total_po_value(self):
-        from purchase_orders.models import PurchaseOrder
+        from apps.purchase_orders.models import PurchaseOrder
         return PurchaseOrder.objects.filter(
             vendor=self, status__in=['approved', 'issued', 'completed']
         ).aggregate(total=models.Sum('total_amount'))['total'] or 0
 
     @property
     def completed_pos(self):
-        from purchase_orders.models import PurchaseOrder
+        from apps.purchase_orders.models import PurchaseOrder
         return PurchaseOrder.objects.filter(vendor=self, status='completed').count()
 
 
@@ -90,7 +98,12 @@ class RFQ(models.Model):
     estimated_budget = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
     terms_and_conditions = models.TextField(blank=True)
     vendors = models.ManyToManyField(Vendor, blank=True, related_name='rfqs')
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_rfqs')
+    created_by = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True,
+    related_name='created_rfqs'
+)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published_at = models.DateTimeField(null=True, blank=True)
@@ -244,7 +257,12 @@ class ApprovalWorkflow(models.Model):
     quotation = models.ForeignKey(Quotation, on_delete=models.CASCADE, related_name='approval_workflows')
     current_stage = models.CharField(max_length=30, choices=STAGE_CHOICES, default='submitted')
     is_active = models.BooleanField(default=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_workflows')
+    created_by = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True,
+    related_name='created_workflows'
+)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -256,7 +274,11 @@ class ApprovalAction(models.Model):
     workflow = models.ForeignKey(ApprovalWorkflow, on_delete=models.CASCADE, related_name='actions')
     stage = models.CharField(max_length=30, choices=ApprovalWorkflow.STAGE_CHOICES)
     action = models.CharField(max_length=20, choices=ApprovalWorkflow.ACTION_CHOICES)
-    acted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    acted_by = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True
+)
     comments = models.TextField(blank=True)
     acted_at = models.DateTimeField(auto_now_add=True)
 

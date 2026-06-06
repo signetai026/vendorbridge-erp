@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Dashboard</h1>
+
+<div class="cards">
+
+    <div class="card">
+        <h3>Active RFQs</h3>
+        <h2>{{ active_rfqs }}</h2>
+    </div>
+
+    <div class="card">
+        <h3>Pending Approvals</h3>
+        <h2>{{ pending_approvals }}</h2>
+    </div>
+
+    <div class="card">
+        <h3>PO This Month</h3>
+        <h2>{{ pos_this_month }}</h2>
+    </div>
+
+    <div class="card">
+        <h3>Overdue Invoices</h3>
+        <h2>{{ overdue_invoices }}</h2>
+    </div>
+
+</div>
+
+<h2>Quick Actions</h2>
+
+<div style="margin-bottom:20px;">
+
+    <a href="/rfqs/" class="btn">Create RFQ</a>
+
+    <a href="/vendors/" class="btn">Add Vendor</a>
+
+    <a href="/invoices/" class="btn">Invoices</a>
+
+</div>
+
+<h2>Recent Purchase Orders</h2>
+
+<table>
+
+    <thead>
+        <tr>
+            <th>PO Number</th>
+            <th>Vendor</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for po in recent_pos %}
+        <tr>
+            <td>{{ po.po_number }}</td>
+            <td>{{ po.vendor }}</td>
+            <td>{{ po.status }}</td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="3">No Purchase Orders Found</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+<h2 style="margin-top:30px;">Recent Invoices</h2>
+
+<table>
+
+    <thead>
+        <tr>
+            <th>Invoice No</th>
+            <th>Vendor</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for invoice in recent_invoices %}
+        <tr>
+            <td>{{ invoice.invoice_number }}</td>
+            <td>{{ invoice.vendor }}</td>
+            <td>{{ invoice.status }}</td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="3">No Invoices Found</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

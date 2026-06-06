@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class ActivityLog(models.Model):
@@ -27,7 +27,14 @@ class ActivityLog(models.Model):
         ('comparison_viewed', 'Quotation Comparison Viewed'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name='activity_logs'
+    )
+
     action = models.CharField(max_length=30, choices=ACTION_CHOICES)
     description = models.TextField()
     object_type = models.CharField(max_length=50, blank=True)
@@ -46,15 +53,22 @@ class ActivityLog(models.Model):
     @classmethod
     def log(cls, user, action, description, obj=None, request=None, extra=None):
         ip = None
+
         if request:
-            ip = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0] or request.META.get('REMOTE_ADDR')
+            ip = (
+                request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0]
+                or request.META.get('REMOTE_ADDR')
+            )
+
         obj_type = ''
         obj_id = None
         obj_name = ''
+
         if obj:
             obj_type = obj.__class__.__name__
             obj_id = getattr(obj, 'id', None)
             obj_name = str(obj)
+
         cls.objects.create(
             user=user,
             action=action,

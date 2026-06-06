@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Quotation Comparison</h1>
+
+<table>
+
+<tr>
+<th>Vendor</th>
+<th>Amount</th>
+<th>Delivery Days</th>
+</tr>
+
+{% for q in quotations %}
+
+<tr>
+<td>{{ q.vendor.company_name }}</td>
+<td>{{ q.grand_total }}</td>
+<td>{{ q.delivery_days }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

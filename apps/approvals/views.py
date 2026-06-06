@@ -11,8 +11,8 @@ import json
 
 from .models import Vendor, RFQ, RFQItem, Quotation, QuotationItem, ApprovalWorkflow, ApprovalAction
 from .forms import VendorForm, RFQForm, RFQItemFormSet, QuotationForm, QuotationItemFormSet
-from activity.models import ActivityLog
-from purchase_orders.models import PurchaseOrder, POItem
+from apps.activity_logs.models import ActivityLog
+from apps.purchase_orders.models import PurchaseOrder, POItem
 
 
 # ============ VENDOR VIEWS ============
@@ -559,3 +559,8 @@ def generate_po_from_workflow(request, pk):
     ActivityLog.log(request.user, 'po_generated', f'PO {po.po_number} generated from workflow', po, request)
     messages.success(request, f'Purchase Order {po.po_number} generated successfully.')
     return redirect('po_detail', pk=po.pk)
+
+from django.shortcuts import render
+
+def approval_list(request):
+    return render(request, 'approvals/approval_list.html')

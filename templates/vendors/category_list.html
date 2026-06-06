@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Vendor Categories</h1>
+
+<a href="/vendors/categories/create/" class="btn-add">
+    + Add Category
+</a>
+
+<br><br>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Total Vendors</th>
+    </tr>
+
+    {% for category in categories %}
+    <tr>
+        <td>{{ category.name }}</td>
+        <td>{{ category.vendor_count }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="2">
+            No Categories Found
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

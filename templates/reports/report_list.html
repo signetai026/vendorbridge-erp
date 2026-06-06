@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Reports Dashboard</h1>
+
+<div style="display:flex; gap:20px; margin-top:20px;">
+
+    <div style="border:1px solid #ccc; padding:20px;">
+        <h3>Total Vendors</h3>
+        <h2>25</h2>
+    </div>
+
+    <div style="border:1px solid #ccc; padding:20px;">
+        <h3>Total RFQs</h3>
+        <h2>18</h2>
+    </div>
+
+    <div style="border:1px solid #ccc; padding:20px;">
+        <h3>Total Quotations</h3>
+        <h2>42</h2>
+    </div>
+
+    <div style="border:1px solid #ccc; padding:20px;">
+        <h3>Purchase Orders</h3>
+        <h2>12</h2>
+    </div>
+
+</div>
+
+<br><br>
+
+<table border="1" width="100%" cellpadding="10">
+    <tr>
+        <th>Report</th>
+        <th>Status</th>
+    </tr>
+
+    <tr>
+        <td>Vendor Performance Report</td>
+        <td>Available</td>
+    </tr>
+
+    <tr>
+        <td>RFQ Summary Report</td>
+        <td>Available</td>
+    </tr>
+
+    <tr>
+        <td>Purchase Order Report</td>
+        <td>Available</td>
+    </tr>
+
+    <tr>
+        <td>Invoice Report</td>
+        <td>Available</td>
+    </tr>
+</table>
+
+{% endblock %}
