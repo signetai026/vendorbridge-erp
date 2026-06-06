@@ -211,3 +211,62 @@ label{
     border-radius:10px;
     box-shadow:0 0 10px rgba(0,0,0,.1);
 }
+
+.create-rfq-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white !important;
+
+    padding:12px 22px;
+    border-radius:12px;
+
+    text-decoration:none;
+    font-weight:600;
+    font-size:14px;
+
+    box-shadow:0 8px 20px rgba(37,99,235,.3);
+
+    transition:all .3s ease;
+}
+
+.create-rfq-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 25px rgba(37,99,235,.45);
+}
+
+.create-rfq-btn::before{
+    content:"+";
+    font-size:18px;
+    font-weight:bold;
+}
+.create-quotation-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+
+    background:linear-gradient(135deg,#10b981,#059669);
+    color:white !important;
+
+    padding:12px 24px;
+    border-radius:12px;
+
+    text-decoration:none;
+    font-weight:600;
+    font-size:14px;
+
+    box-shadow:0 8px 20px rgba(16,185,129,.35);
+
+    transition:all .3s ease;
+}
+
+.create-quotation-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 25px rgba(16,185,129,.45);
+}
+
+.create-quotation-btn::before{
+    content:"💰";
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Profile</title>
+
+<style>
+body{
+    background:#f8fafc;
+    font-family:Segoe UI;
+}
+.card{
+    width:700px;
+    margin:50px auto;
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h1>👤 My Profile</h1>
+
+<hr><br>
+
+<p><strong>Username:</strong> {{ user.username }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+<p><strong>Joined:</strong> {{ user.date_joined }}</p>
+
+</div>
+
+</body>
+</html>

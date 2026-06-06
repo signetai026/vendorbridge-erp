@@ -1,8 +1,159 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VendorBridge ERP - Register</title>
 
-{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<h1>Register User</h1>
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(
+        135deg,
+        #0f172a,
+        #1e3a8a,
+        #2563eb
+    );
+    overflow:hidden;
+}
+
+body::before{
+    content:'';
+    position:absolute;
+    width:400px;
+    height:400px;
+    background:#60a5fa;
+    border-radius:50%;
+    top:-100px;
+    right:-100px;
+    filter:blur(120px);
+    opacity:.5;
+}
+
+body::after{
+    content:'';
+    position:absolute;
+    width:350px;
+    height:350px;
+    background:#3b82f6;
+    border-radius:50%;
+    bottom:-100px;
+    left:-100px;
+    filter:blur(120px);
+    opacity:.5;
+}
+
+.card{
+    width:500px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.2);
+    padding:40px;
+    border-radius:24px;
+    box-shadow:0 25px 60px rgba(0,0,0,.25);
+    color:white;
+    z-index:10;
+}
+
+.logo{
+    text-align:center;
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.title{
+    text-align:center;
+    font-size:30px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    opacity:.8;
+    margin-bottom:30px;
+}
+
+input,
+select{
+    width:100%;
+    padding:14px 16px;
+    border:none;
+    border-radius:12px;
+    margin-top:8px;
+    margin-bottom:18px;
+    background:rgba(255,255,255,.15);
+    color:white;
+    outline:none;
+}
+
+input::placeholder{
+    color:#ddd;
+}
+
+label{
+    display:block;
+    margin-bottom:4px;
+    font-size:14px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:white;
+    color:#2563eb;
+    font-weight:700;
+    font-size:16px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+.bottom{
+    text-align:center;
+    margin-top:20px;
+}
+
+.bottom a{
+    color:#fff;
+    text-decoration:none;
+    font-weight:600;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="logo">🚀</div>
+
+<div class="title">
+Create Account
+</div>
+
+<div class="subtitle">
+VendorBridge ERP Platform
+</div>
 
 <form method="post">
 
@@ -11,9 +162,19 @@
 {{ form.as_p }}
 
 <button type="submit">
-Register
+Create Account
 </button>
 
 </form>
 
-{% endblock %}
+<div class="bottom">
+Already have an account?
+<a href="{% url 'accounts:login' %}">
+Login
+</a>
+</div>
+
+</div>
+
+</body>
+</html>
